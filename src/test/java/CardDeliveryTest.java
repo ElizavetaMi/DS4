@@ -14,13 +14,12 @@ public class CardDeliveryTest {
     static void setUp() {
         Configuration.baseUrl = "http://localhost:9999/";
         Configuration.browserSize = "1920x1080";
-        Configuration.headless = Boolean.parseBoolean(System.getProperty("selenide.headless", "false"));
-        Configuration.timeout = 10000;
+        // Удалено глобальное изменение таймаута
     }
 
     @Test
     void shouldSubmitFormSuccessfully() {
-        open("http://localhost:9999");  // адрес зависит от запуска SUT
+        open("/");
 
         String validDate = DataGenerator.generateDate(3);
 
@@ -33,9 +32,6 @@ public class CardDeliveryTest {
 
         $("[data-test-id=notification]")
                 .shouldBe(visible, Duration.ofSeconds(15))
-                .shouldHave(text("Успешно!"));
-
-        $("[data-test-id=notification] .notification__content")
-                .shouldHave(text(validDate));
+                .shouldHave(text("Успешно! Встреча успешно забронирована на " + validDate), Duration.ofSeconds(15));
     }
 }
